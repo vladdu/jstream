@@ -10,11 +10,18 @@ public class Processor {
         });
     }
 
-    private void processBatch(Batch batch, List<Receiver> receivers) {
-        Object result = processBatch(batch, receivers);
-        for (Receiver receiver : receivers) {
-            receiver.receive(batch);
+    void processBatch(Batch batch, List<Receiver> receivers) {
+        Object result = processBatch(batch);
+        if (result == null) {
+            return;
         }
+        for (Receiver receiver : receivers) {
+            receiver.notify(batch, result);
+        }
+    }
+
+    Object processBatch(Batch batch) {
+        return null;
     }
 
 }
