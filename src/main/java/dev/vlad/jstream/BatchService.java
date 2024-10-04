@@ -1,13 +1,20 @@
 package dev.vlad.jstream;
 
-import java.util.stream.Stream;
+import io.vavr.control.Either;
 
-public class BatchService {
+import java.util.List;
+import java.util.function.Supplier;
 
-    public Stream<Batch> batches() {
-        // Implementation to fetch batches from a data source
-        // For example, from a database or a file
-        return Stream.of(new Batch(), new Batch());
+public class BatchService implements Supplier<Either<Error, Batch>> {
+    private int current = 0;
+
+    @Override
+    public Either<Error, Batch> get() {
+        current++;
+        if (current < 10) {
+            return Either.right(new Batch(current, List.of(new Entry("Entry1"))));
+        } else {
+            return Either.left(new Error("No more batches available"));
+        }
     }
-
 }
